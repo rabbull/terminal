@@ -6,7 +6,7 @@ const hostname = window.location.hostname;
 const whoami = 'Zisen Liu (刘子森), MSc student @ University of Zurich'
 
 export const commands: Record<string, (args: string[]) => Promise<string> | string> = {
-  help: () => 'Available commands: ' + Object.keys(commands).join(', '),
+  help: () => 'Available commands: \n\t' + Object.keys(commands).join(', \n\t'),
   hostname: () => hostname,
   whoami: () => whoami,
   date: () => new Date().toLocaleString(),
@@ -106,16 +106,19 @@ export const commands: Record<string, (args: string[]) => Promise<string> | stri
     return ''
   },
   banner: () => `
-    ███╗   ███╗██╗   ██╗███████╗███████╗██╗     ███████╗
-    ████╗ ████║╚██╗ ██╔╝██╔════╝██╔════╝██║     ██╔════╝
-    ██╔████╔██║ ╚████╔╝ ███████╗█████╗  ██║     █████╗  
-    ██║╚██╔╝██║  ╚██╔╝  ╚════██║██╔══╝  ██║     ██╔══╝  
-    ██║ ╚═╝ ██║   ██║   ███████║███████╗███████╗██║     
-    ╚═╝     ╚═╝   ╚═╝   ╚══════╝╚══════╝╚══════╝╚═╝      v${packageJson.version}
+  ███╗   ███╗██╗   ██╗███████╗███████╗██╗     ███████╗
+  ████╗ ████║╚██╗ ██╔╝██╔════╝██╔════╝██║     ██╔════╝
+  ██╔████╔██║ ╚████╔╝ ███████╗█████╗  ██║     █████╗  
+  ██║╚██╔╝██║  ╚██╔╝  ╚════██║██╔══╝  ██║     ██╔══╝  
+  ██║ ╚═╝ ██║   ██║   ███████║███████╗███████╗██║     
+  ╚═╝     ╚═╝   ╚═╝   ╚══════╝╚══════╝╚══════╝╚═╝      v${packageJson.version}
 
 
-  Hi! I'm ${whoami}. Welcome to my homepage.
- 
-  Please feel free to explore around. Type 'help' to see list of available commands.
+  Hi! I'm ${whoami}.
+  
+  Welcome to my homepage.
+  Please feel free to explore around. 
+  Type 'help' to see list of available commands.
+
 `,
 };
