@@ -10,58 +10,28 @@ export const commands: Record<string, (args: string[]) => Promise<string> | stri
   hostname: () => hostname,
   whoami: () => 'guest',
   date: () => new Date().toLocaleString(),
-  vi: () => `why use vi? try 'emacs'`,
-  vim: () => `why use vim? try 'emacs'`,
+  vi: () => `why use vi? try 'vim'`,
+  vim: () => `That's the way you code!`,
   emacs: () => `why use emacs? try 'vim'`,
-  echo: (args: string[]) => args.join(' '),
+  echo: (args: string[]) => {
+    if (args.length == 2 && args[0] == '<') {
+      if (args[1] == 'foobar') {
+        return 'come on, read me with cat.'
+      }
+      if (args[1] == 'deep_dark_secret') {
+        return `bash: deep_dark_secret: Permission denied (try run with 'sudo')`
+      }
+    }
+    return args.join(' ')
+  },
   sudo: (args: string[]) => {
     window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
 
     return `Permission denied: unable to run the command '${args[0]}' as root.`;
   },
-  theme: (args: string[]) => {
-    const usage = `Usage: theme [args].
-    [args]:
-      ls: list all available themes
-      set: set theme to [theme]
-
-    [Examples]:
-      theme ls
-      theme set gruvboxdark
-    `;
-    if (args.length === 0) {
-      return usage;
-    }
-
-    switch (args[0]) {
-      case 'ls': {
-        let result = themes.map((t) => t.name.toLowerCase()).join(', ');
-        result += `You can preview all these themes here: ${packageJson.repository.url}/tree/master/docs/themes`;
-
-        return result;
-      }
-
-      case 'set': {
-        if (args.length !== 2) {
-          return usage;
-        }
-
-        const selectedTheme = args[1];
-        const t = themes.find((t) => t.name.toLowerCase() === selectedTheme);
-
-        if (!t) {
-          return `Theme '${selectedTheme}' not found. Try 'theme ls' to see all available themes.`;
-        }
-
-        theme.set(t);
-
-        return `Theme set to ${selectedTheme}`;
-      }
-
-      default: {
-        return usage;
-      }
-    }
+  ls: (args: string[]) => {
+    return `----------   1  lzs  lzs  114514 Oct 22 00:01 deep_dark_secret
+-rw-r--r--   6  lzs  lzs 1919810 May 15 23:20 foobar`
   },
   repo: () => {
     window.open(packageJson.repository.url, '_blank');
@@ -77,11 +47,6 @@ export const commands: Record<string, (args: string[]) => Promise<string> | stri
     window.open(`mailto:${packageJson.author.email}`);
 
     return `Opening mailto:${packageJson.author.email}...`;
-  },
-  donate: () => {
-    window.open(packageJson.funding.url, '_blank');
-
-    return 'Opening donation url...';
   },
   weather: async (args: string[]) => {
     const city = args.join('+');
@@ -102,7 +67,11 @@ export const commands: Record<string, (args: string[]) => Promise<string> | stri
       return 'curl: no URL provided';
     }
 
-    const url = args[0];
+    let url = args[0];
+    if (!/^https?:\/\//.test(url)) {
+      url = `https://${url}`;
+    }
+    url = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
 
     try {
       const response = await fetch(url);
@@ -114,13 +83,32 @@ export const commands: Record<string, (args: string[]) => Promise<string> | stri
     }
   },
   banner: () => `
-███╗   ███╗██╗  ██╗████████╗████████╗███████╗██████╗
-████╗ ████║██║  ██║╚══██╔══╝╚══██╔══╝╚════██║╚════██╗
-██╔████╔██║███████║   ██║      ██║       ██╔╝ █████╔╝
-██║╚██╔╝██║╚════██║   ██║      ██║      ██╔╝ ██╔═══╝
-██║ ╚═╝ ██║     ██║   ██║      ██║      ██║  ███████╗
-╚═╝     ╚═╝     ╚═╝   ╚═╝      ╚═╝      ╚═╝  ╚══════╝ v${packageJson.version}
+    ███╗   ███╗██╗   ██╗███████╗███████╗██╗     ███████╗
+    ████╗ ████║╚██╗ ██╔╝██╔════╝██╔════╝██║     ██╔════╝
+    ██╔████╔██║ ╚████╔╝ ███████╗█████╗  ██║     █████╗  
+    ██║╚██╔╝██║  ╚██╔╝  ╚════██║██╔══╝  ██║     ██╔══╝  
+    ██║ ╚═╝ ██║   ██║   ███████║███████╗███████╗██║     
+    ╚═╝     ╚═╝   ╚═╝   ╚══════╝╚══════╝╚══════╝╚═╝      v${packageJson.version}
 
 Type 'help' to see list of available commands.
 `,
+  cat: (args: string[]) => {
+    if (args.length > 0 && (args[0] == 'deep_dark_secret' || args[0] == './deep_dark_secret')) {
+      return `cat: ${args[0]}: Permission denied (try run with 'sudo')`
+    }
+    window.open("https://cataas.com/cat")
+    return "CAT stands for Cute And Troubleful instead of conCATenate."
+  },
+  dify: () => {
+    window.open("https://dify.liuzisen.com/")
+    return ''
+  },
+  minio: () => {
+    window.open('https://minio.liuzisen.com/')
+    return ''
+  },
+  cv: () => {
+    window.open('https://s3.liuzisen.com/public/zisen_liu_ai_platform.pdf')
+    return ''
+  },
 };
