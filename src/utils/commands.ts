@@ -107,6 +107,10 @@ Type 'help' to see list of available commands.
     window.open('https://minio.liuzisen.com/')
     return ''
   },
+  overleaf: () => {
+    window.open('https://overleaf.liuzisen.com/')
+    return ''
+  },
   cv: () => {
     window.open('https://s3.liuzisen.com/public/zisen_liu_ai_platform.pdf')
     return ''
