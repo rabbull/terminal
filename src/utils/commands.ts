@@ -1,14 +1,14 @@
 import packageJson from '../../package.json';
-import themes from '../../themes.json';
 import { history } from '../stores/history';
-import { theme } from '../stores/theme';
 
 const hostname = window.location.hostname;
+
+const whoami = 'Zisen Liu (刘子森), MSc student @ University of Zurich'
 
 export const commands: Record<string, (args: string[]) => Promise<string> | string> = {
   help: () => 'Available commands: ' + Object.keys(commands).join(', '),
   hostname: () => hostname,
-  whoami: () => 'guest',
+  whoami: () => whoami,
   date: () => new Date().toLocaleString(),
   vi: () => `why use vi? try 'vim'`,
   vim: () => `That's the way you code!`,
@@ -82,16 +82,6 @@ export const commands: Record<string, (args: string[]) => Promise<string> | stri
       return `curl: could not fetch URL ${url}. Details: ${error}`;
     }
   },
-  banner: () => `
-    ███╗   ███╗██╗   ██╗███████╗███████╗██╗     ███████╗
-    ████╗ ████║╚██╗ ██╔╝██╔════╝██╔════╝██║     ██╔════╝
-    ██╔████╔██║ ╚████╔╝ ███████╗█████╗  ██║     █████╗  
-    ██║╚██╔╝██║  ╚██╔╝  ╚════██║██╔══╝  ██║     ██╔══╝  
-    ██║ ╚═╝ ██║   ██║   ███████║███████╗███████╗██║     
-    ╚═╝     ╚═╝   ╚═╝   ╚══════╝╚══════╝╚══════╝╚═╝      v${packageJson.version}
-
-Type 'help' to see list of available commands.
-`,
   cat: (args: string[]) => {
     if (args.length > 0 && (args[0] == 'deep_dark_secret' || args[0] == './deep_dark_secret')) {
       return `cat: ${args[0]}: Permission denied (try run with 'sudo')`
@@ -115,4 +105,17 @@ Type 'help' to see list of available commands.
     window.open('https://s3.liuzisen.com/public/zisen_liu_ai_platform.pdf')
     return ''
   },
+  banner: () => `
+    ███╗   ███╗██╗   ██╗███████╗███████╗██╗     ███████╗
+    ████╗ ████║╚██╗ ██╔╝██╔════╝██╔════╝██║     ██╔════╝
+    ██╔████╔██║ ╚████╔╝ ███████╗█████╗  ██║     █████╗  
+    ██║╚██╔╝██║  ╚██╔╝  ╚════██║██╔══╝  ██║     ██╔══╝  
+    ██║ ╚═╝ ██║   ██║   ███████║███████╗███████╗██║     
+    ╚═╝     ╚═╝   ╚═╝   ╚══════╝╚══════╝╚══════╝╚═╝      v${packageJson.version}
+
+
+  Hi! I'm ${whoami}. Welcome to my homepage.
+ 
+  Please feel free to explore around. Type 'help' to see list of available commands.
+`,
 };
