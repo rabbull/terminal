@@ -5,8 +5,47 @@ const hostname = window.location.hostname;
 
 const whoami = 'Zisen Liu (刘子森), MSc student @ University of Zurich'
 
+const open = function(url: string) {
+  window.open(url)
+  return `Openning ${url}...`
+}
+
 export const commands: Record<string, (args: string[]) => Promise<string> | string> = {
   help: () => 'Available commands: \n\t' + Object.keys(commands).join(', \n\t'),
+  email: () => open(`mailto:${packageJson.author.email}`),
+  linkedin: () => open('https://linkedin.com/in/zisen-liu/'),
+  github: () => open('https://github.com/rabbull/'),
+  cv: () => open('https://s3.liuzisen.com/public/zisen_liu_ai_platform.pdf'),
+
+  toolbox: (args: string[]) => {
+    let tools: Record<string, (args: string[]) => Promise<string> | string> = {
+      'dify': () => open('https://dify.liuzisen.com/'),
+      'minio': () => open('https://minio.liuzisen.com/'),
+      'overleaf': () => open('https://overleaf.liuzisen.com/'),
+      'weather': async (args: string[]) => {
+        const city = args.join('+');
+    
+        if (!city) {
+          return 'Usage: weather [city]. Example: weather Brussels';
+        }
+    
+        const weather = await fetch(`https://wttr.in/${city}?ATm`);
+    
+        return weather.text();
+      },
+    }
+    if (args.length < 1) {
+      return `Usage: toolbox TOOL
+
+Avaliable tools:\n\t` + Object.keys(tools).join('\n\t')
+    }
+    let tool = args[0];
+    if (tool in tools) {
+      return tools[tool](args.slice(1));
+    }
+    return `toolbox: unknown tool: ${tool}`
+  },
+
   hostname: () => hostname,
   whoami: () => whoami,
   date: () => new Date().toLocaleString(),
@@ -26,42 +65,17 @@ export const commands: Record<string, (args: string[]) => Promise<string> | stri
   },
   sudo: (args: string[]) => {
     window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
-
     return `Permission denied: unable to run the command '${args[0]}' as root.`;
   },
-  ls: (args: string[]) => {
+  ls: () => {
     return `----------   1  lzs  lzs  114514 Oct 22 00:01 deep_dark_secret
 -rw-r--r--   6  lzs  lzs 1919810 May 15 23:20 foobar`
   },
-  repo: () => {
-    window.open(packageJson.repository.url, '_blank');
-
-    return 'Opening repository...';
-  },
   clear: () => {
     history.set([]);
-
     return '';
   },
-  email: () => {
-    window.open(`mailto:${packageJson.author.email}`);
-
-    return `Opening mailto:${packageJson.author.email}...`;
-  },
-  weather: async (args: string[]) => {
-    const city = args.join('+');
-
-    if (!city) {
-      return 'Usage: weather [city]. Example: weather Brussels';
-    }
-
-    const weather = await fetch(`https://wttr.in/${city}?ATm`);
-
-    return weather.text();
-  },
-  exit: () => {
-    return 'Please close the tab to exit.';
-  },
+  exit: () => 'Please close the tab to exit.',
   curl: async (args: string[]) => {
     if (args.length === 0) {
       return 'curl: no URL provided';
@@ -88,22 +102,6 @@ export const commands: Record<string, (args: string[]) => Promise<string> | stri
     }
     window.open("https://cataas.com/cat")
     return "CAT stands for Cute And Troubleful instead of conCATenate."
-  },
-  dify: () => {
-    window.open("https://dify.liuzisen.com/")
-    return ''
-  },
-  minio: () => {
-    window.open('https://minio.liuzisen.com/')
-    return ''
-  },
-  overleaf: () => {
-    window.open('https://overleaf.liuzisen.com/')
-    return ''
-  },
-  cv: () => {
-    window.open('https://s3.liuzisen.com/public/zisen_liu_ai_platform.pdf')
-    return ''
   },
   banner: () => `
   ███╗   ███╗██╗   ██╗███████╗███████╗██╗     ███████╗
